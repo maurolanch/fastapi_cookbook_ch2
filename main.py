@@ -45,7 +45,7 @@ def get_user(
     db: Session = Depends(get_db)
     ):
     user = (
-        db.query(User).filter(User.user_id == user_id).first()
+        db.query(User).filter(User.id == user_id).first()
     )
     if user is None:
         raise HTTPException(
@@ -62,7 +62,7 @@ def update_user(
     db: Session = Depends(get_db)
 ):
     db_user = (
-        db.query(User).filter(User.user_id == user_id).first()
+        db.query(User).filter(User.id == user_id).first()
     )
     if db_user is None:
         raise HTTPException(
@@ -80,7 +80,7 @@ def delete_user(
     user_id: int,
     db: Session = Depends(get_db)
 ):
-    db_user = db.query(User).filter(User.user_id == user_id).first()
+    db_user = db.query(User).filter(User.id == user_id).first()
 
     if not db_user:
         raise HTTPException(
@@ -90,3 +90,4 @@ def delete_user(
     db.delete(db_user)
     db.commit()
     return {"detail": "User deleted"}
+
