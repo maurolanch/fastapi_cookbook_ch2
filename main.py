@@ -54,3 +54,24 @@ def get_user(
         )
     return user
 
+
+@app.post("/user/{user_id}")
+def update_user(
+    user_id: int,
+    user=UserBody,
+    db: Session = Depends(get_db)
+):
+    db_user = (
+        db.query(User).filter(User.user_id == user_id).first()
+    )
+    if db_user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+    db.user_name = user.name
+    db.email = user.email
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
